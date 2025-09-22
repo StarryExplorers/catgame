@@ -3,63 +3,74 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Spark & Nova — Cat Care 🐾</title>
+<title>Spark & Nova — Cats Care (Original)</title>
 <style>
   :root{
-    --bg:#FFF8FF; --panel:#fff; --muted:#7A6B8A;
-    --accent:#FF9AC2; --accent2:#9AD9FF; --good:#9EE0A1; --bad:#FFB3B3;
-    --radius:16px; --shadow:0 12px 30px rgba(122,107,138,0.08); --ui:system-ui,system-ui, -apple-system, 'Segoe UI', Roboto;
+    --bg: #FFF8FF;
+    --card: #fff;
+    --muted: #6f5b73;
+    --accent: #FF9AC2;
+    --accent2: #9AD9FF;
+    --good: #9EE0A1;
+    --bad: #FFB3B3;
+    --radius:14px;
+    --shadow: 0 12px 30px rgba(122,107,138,0.08);
+    --ui: system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:var(--ui);background:linear-gradient(180deg,#FFF8FF,#FFFEF8);color:#2a2130;display:flex;align-items:center;justify-content:center;padding:18px}
+  body{margin:0;font-family:var(--ui);background:linear-gradient(180deg,var(--bg),#FFFEF8);color:#302239;display:flex;align-items:center;justify-content:center;padding:18px}
   .wrap{width:100%;max-width:1100px}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px}
+  header{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900}
   h1{margin:0;font-size:20px}
   .app{display:grid;grid-template-columns:320px 1fr;gap:16px}
-  .panel{background:var(--panel);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+  .panel{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
   .mini{font-size:13px;color:var(--muted)}
 
-  /* left */
-  .cats-list{display:flex;flex-direction:column;gap:8px}
-  .cat-card{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;cursor:pointer}
+  .cat-list{display:flex;flex-direction:column;gap:8px}
+  .cat-card{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;cursor:pointer}
   .cat-card.active{box-shadow:0 8px 18px rgba(154,217,255,0.12);background:linear-gradient(90deg,#fff,#FFF7FF)}
-  .cat-pic{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px}
+  .cat-thumb{width:58px;height:58px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center}
 
-  /* right: main pet area */
-  .stage{display:flex;gap:14px;align-items:flex-start}
-  .pet-area{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
-  .pet-window{width:420px;height:360px;border-radius:14px;background:linear-gradient(180deg,#fff,#FFF7FF);display:flex;align-items:center;justify-content:center;position:relative;border:2px solid rgba(42,33,48,0.04)}
-  .pet-emoji{font-size:96px}
-  .bars{width:420px;display:flex;flex-direction:column;gap:8px}
+  .stage{display:flex;gap:12px;align-items:flex-start}
+  .game-stage{flex:1;display:flex;flex-direction:column;align-items:center}
+  .scene{width:520px;height:420px;border-radius:16px;background:linear-gradient(180deg,#fff,#FFFCFF);position:relative;border:2px solid rgba(0,0,0,0.03);overflow:hidden}
+
+  /* HUD bars */
+  .bars{width:520px;display:flex;flex-direction:column;gap:8px;margin-top:10px}
   .bar{display:flex;align-items:center;gap:8px}
-  .bar .label{width:80px;font-size:13px;color:var(--muted)}
-  .bar .meter{flex:1;height:14px;border-radius:10px;background:#f1f1f6;position:relative}
-  .bar .meter > i{position:absolute;left:0;top:0;bottom:0;border-radius:10px}
+  .bar .label{width:90px;font-size:13px;color:var(--muted)}
+  .meter{flex:1;height:14px;border-radius:10px;background:#f3f2f6;position:relative}
+  .meter > i{position:absolute;left:0;top:0;bottom:0;border-radius:10px}
 
-  .actions{display:flex;gap:8px;margin-top:8px}
+  .actions{display:flex;gap:8px;margin-top:12px}
   .btn{padding:10px 12px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
   .btn-primary{background:linear-gradient(90deg,var(--accent),#FFD59A);color:#3a2330}
   .btn-ghost{background:transparent;border:1px dashed rgba(42,33,48,0.06)}
 
-  .log{margin-top:8px;background:#fff;padding:8px;border-radius:10px;max-height:120px;overflow:auto}
+  .panel-right{width:260px;display:flex;flex-direction:column;gap:10px}
+  .panel-right .box{background:linear-gradient(180deg,#fff,#fff);padding:12px;border-radius:12px}
 
-  /* play minigame toy */
-  .toy{position:absolute;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
-  .sparkles{position:absolute;left:12px;top:12px;font-size:20px;opacity:0.9}
+  /* cat sprite area */
+  .cat-sprite{width:260px;height:260px;display:flex;align-items:center;justify-content:center}
+  svg.cat{width:220px;height:220px}
 
-  .footer{margin-top:10px;text-align:center;color:var(--muted)}
+  /* mini-games */
+  .toy{position:absolute;width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg,#fff,#fff6);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 10px 20px rgba(0,0,0,0.08);cursor:pointer}
+  .fish{position:absolute;width:60px;height:40px;background:linear-gradient(90deg,#7fd3ff,#5bb1ff);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
 
-  @media (max-width:980px){.app{grid-template-columns:1fr}.pet-window{width:320px;height:300px}.bars{width:320px}}
+  .log{max-height:120px;overflow:auto;background:#fff;padding:8px;border-radius:10px}
+
+  @media (max-width:980px){.app{grid-template-columns:1fr}.scene{width:360px;height:300px}.bars{width:360px}}
 </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="logo">🐾</div>
+      <div class="logo">🐱</div>
       <div>
-        <h1>Cat Care — take care of your cute kitties</h1>
-        <div class="mini">Feed, play, groom, and collect toys. Saves automatically to your device.</div>
+        <h1>Cats Care — Cat Care Game</h1>
+        <div class="mini">Not a copy of any existing app. Original cats drawn in SVG, interactive care, mini-games, outfits & progression.</div>
       </div>
     </header>
 
@@ -68,97 +79,85 @@
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
             <div class="mini">Your Cats</div>
-            <div style="font-weight:800">Tap a cat to choose</div>
+            <div style="font-weight:800">Tap to select a cat</div>
           </div>
           <div>
             <button class="btn btn-primary" id="newCatBtn">+ New Cat</button>
           </div>
         </div>
 
-        <div style="margin-top:12px" class="cats-list" id="catsList"></div>
+        <div style="margin-top:12px" class="cat-list" id="catsList"></div>
 
-        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(42,33,48,0.04)">
-        <div class="mini">Daily Streak: <strong id="dailyStreak">0</strong> days</div>
-        <div class="mini">Last saved: <span id="lastSaved">—</span></div>
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
+        <div class="mini">Daily Streak: <strong id="dailyStreak">0</strong></div>
+        <div class="mini">Auto-saves locally • No login</div>
       </div>
 
-      <div class="panel">
-        <div class="stage">
-          <div class="pet-area">
-            <div class="pet-window" id="petWindow">
-              <div class="pet-emoji" id="petEmoji">😺</div>
-              <div class="toy" id="toy" style="display:none">🎾</div>
-              <div class="sparkles" id="sparkles">✨</div>
-            </div>
-
-            <div class="bars">
-              <div class="bar"><div class="label">Hunger</div><div class="meter" id="hungerMeter"><i style="width:50%;background:linear-gradient(90deg,#ffd6d6,#ff9a9a)"></i></div></div>
-              <div class="bar"><div class="label">Happiness</div><div class="meter" id="happyMeter"><i style="width:70%;background:linear-gradient(90deg,#fff1a8,#ffd23f)"></i></div></div>
-              <div class="bar"><div class="label">Energy</div><div class="meter" id="energyMeter"><i style="width:80%;background:linear-gradient(90deg,#c8f0ff,#9ad9ff)"></i></div></div>
-              <div class="bar"><div class="label">Clean</div><div class="meter" id="cleanMeter"><i style="width:90%;background:linear-gradient(90deg,#dfffdc,#9ee0a1)"></i></div></div>
-            </div>
-
-            <div class="actions">
-              <button class="btn btn-primary" id="feedBtn">Feed 🍽️</button>
-              <button class="btn btn-primary" id="playBtn">Play 🎾</button>
-              <button class="btn btn-ghost" id="groomBtn">Groom ✂️</button>
-              <button class="btn btn-ghost" id="sleepBtn">Nap 💤</button>
-            </div>
-
-            <div class="log" id="log">Welcome! Create your first cat and start caring for it 💖</div>
+      <div class="panel stage">
+        <div class="game-stage">
+          <div class="scene" id="scene">
+            <!-- cat sprite and toys are injected here -->
           </div>
 
-          <div style="width:220px;display:flex;flex-direction:column;gap:8px">
-            <div style="background:linear-gradient(180deg,#fff,#fff);padding:10px;border-radius:12px">
-              <div class="mini">Selected</div>
-              <div style="font-weight:800" id="selName">—</div>
-              <div class="mini">Level <span id="selLevel">0</span> • XP <span id="selXP">0</span></div>
-            </div>
-
-            <div style="background:linear-gradient(180deg,#fff,#fff);padding:10px;border-radius:12px">
-              <div class="mini">Collection</div>
-              <div id="collection" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div>
-            </div>
-
-            <div style="background:linear-gradient(180deg,#fff,#fff);padding:10px;border-radius:12px">
-              <div class="mini">Badges</div>
-              <div id="badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div>
-            </div>
-
+          <div class="bars">
+            <div class="bar"><div class="label">Hunger</div><div class="meter" id="hungerMeter"><i style="width:60%;background:linear-gradient(90deg,#ffd6d6,#ff9a9a)"></i></div></div>
+            <div class="bar"><div class="label">Happiness</div><div class="meter" id="happyMeter"><i style="width:70%;background:linear-gradient(90deg,#fff1a8,#ffd23f)"></i></div></div>
+            <div class="bar"><div class="label">Energy</div><div class="meter" id="energyMeter"><i style="width:80%;background:linear-gradient(90deg,#c8f0ff,#9ad9ff)"></i></div></div>
+            <div class="bar"><div class="label">Clean</div><div class="meter" id="cleanMeter"><i style="width:90%;background:linear-gradient(90deg,#dfffdc,#9ee0a1)"></i></div></div>
           </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="feedBtn">Feed</button>
+            <button class="btn btn-primary" id="playBtn">Play</button>
+            <button class="btn btn-ghost" id="groomBtn">Groom</button>
+            <button class="btn btn-ghost" id="sleepBtn">Nap</button>
+          </div>
+
+          <div class="log" id="log">Welcome! Create a cat and start caring — no emojis used for cats.</div>
         </div>
 
-        <div class="footer">Auto-save every minute • Local only • No login required</div>
+        <div class="panel-right">
+          <div class="box">
+            <div class="mini">Selected</div>
+            <div style="font-weight:800" id="selName">—</div>
+            <div class="mini">Level <span id="selLevel">0</span> • XP <span id="selXP">0</span></div>
+          </div>
+
+          <div class="box">
+            <div class="mini">Outfits</div>
+            <div id="outfits" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+          </div>
+
+          <div class="box">
+            <div class="mini">Badges</div>
+            <div id="badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 <script>
-// Cozy Cat Care — single-file game
-// Features: multiple cats, feed/play/groom/sleep actions, toy mini-game (click moving toy), XP & levels, daily streak, localStorage save
+// Cozy Cats Care — original, inspired-by features but not a copy of any existing app
+// Uses programmatic SVG cats (not emojis), localStorage save, actions, mini-game (fish click), outfits, leveling
 
-const LS_KEY = 'cozy_cat_care_v1';
+const LS_KEY = 'cozy_cats_v1';
 
-// initial data
-const DEFAULT_CATS = [
-  {id: idGen(), name: 'Mochi', emoji: '😺', hunger: 40, happy: 70, energy: 70, clean: 80, xp: 0, level:1, toys:[], badges:[]},
-  {id: idGen(), name: 'Pudding', emoji: '😸', hunger: 30, happy: 60, energy: 60, clean: 90, xp: 0, level:1, toys:[], badges:[]}
+function idGen(){ return Math.random().toString(36).slice(2,9); }
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+// default sample cats
+const SAMPLE = [
+  {id:idGen(), name:'Mochi', color:'#F7D6E0', accent:'#F2A5C0', pattern:0, hunger:60, happy:70, energy:80, clean:85, xp:0, level:1, outfits:[], badges:[]},
+  {id:idGen(), name:'Pudding', color:'#FFE9B3', accent:'#FFD36B', pattern:1, hunger:55, happy:65, energy:70, clean:90, xp:0, level:1, outfits:[], badges:[]}
 ];
 
-let store = {cats: [], selected: null, lastSaved: null, dailyStreak:0, lastVisit:null};
+let store = {cats:[], selected:null, lastSaved:null, dailyStreak:0, lastVisit:null};
 
-// UI
+// UI elements
 const catsListEl = document.getElementById('catsList');
 const newCatBtn = document.getElementById('newCatBtn');
-const petEmoji = document.getElementById('petEmoji');
-const petWindow = document.getElementById('petWindow');
-const toyEl = document.getElementById('toy');
-const sparkles = document.getElementById('sparkles');
-const feedBtn = document.getElementById('feedBtn');
-const playBtn = document.getElementById('playBtn');
-const groomBtn = document.getElementById('groomBtn');
-const sleepBtn = document.getElementById('sleepBtn');
-const logEl = document.getElementById('log');
+const scene = document.getElementById('scene');
 const hungerMeter = document.getElementById('hungerMeter').firstElementChild;
 const happyMeter = document.getElementById('happyMeter').firstElementChild;
 const energyMeter = document.getElementById('energyMeter').firstElementChild;
@@ -166,128 +165,155 @@ const cleanMeter = document.getElementById('cleanMeter').firstElementChild;
 const selName = document.getElementById('selName');
 const selLevel = document.getElementById('selLevel');
 const selXP = document.getElementById('selXP');
-const collectionEl = document.getElementById('collection');
+const outfitsEl = document.getElementById('outfits');
 const badgesEl = document.getElementById('badges');
 const dailyStreakEl = document.getElementById('dailyStreak');
-const lastSavedEl = document.getElementById('lastSaved');
-
-// helpers
-function idGen(){ return Math.random().toString(36).slice(2,9); }
-function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
-function fmtTime(ts){ return new Date(ts).toLocaleString(); }
+const logEl = document.getElementById('log');
 
 // load/save
 function load(){
   try{
     const raw = localStorage.getItem(LS_KEY);
     if(raw){ store = JSON.parse(raw); }
-    if(!store.cats || store.cats.length===0){ store.cats = DEFAULT_CATS; store.selected = store.cats[0].id; }
-  }catch(e){ console.error(e); store.cats = DEFAULT_CATS; store.selected = store.cats[0].id; }
-  // daily streak logic
-  const last = store.lastVisit ? new Date(store.lastVisit).toDateString() : null;
-  const today = new Date().toDateString();
+  }catch(e){ console.warn(e); }
+  if(!store.cats || store.cats.length===0){ store.cats = SAMPLE; store.selected = SAMPLE[0].id; }
+  // daily streak handling
+  const last = store.lastVisit ? new Date(store.lastVisit).toDateString() : null; const today = new Date().toDateString();
   if(!last) store.dailyStreak = 1; else {
-    const diff = (new Date(today) - new Date(last)) / (1000*60*60*24);
-    if(diff === 0) ; // same day keep streak
-    else if(diff <= 1) store.dailyStreak = (store.dailyStreak||0) + 1;
-    else store.dailyStreak = 1;
+    const diff = Math.floor((new Date(today) - new Date(last)) / (1000*60*60*24));
+    if(diff === 0) ; else if(diff === 1) store.dailyStreak = (store.dailyStreak||0) + 1; else store.dailyStreak = 1;
   }
   store.lastVisit = new Date().toString();
-  dailyStreakEl.textContent = store.dailyStreak;
 }
+function save(){ store.lastSaved = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(store)); }
 
-function save(){ store.lastSaved = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(store)); lastSavedEl.textContent = fmtTime(store.lastSaved); }
-
-// UI rendering
-function renderCatsList(){ catsListEl.innerHTML=''; store.cats.forEach(cat=>{
-  const div = document.createElement('div'); div.className='cat-card'; if(store.selected===cat.id) div.classList.add('active');
-  const pic = document.createElement('div'); pic.className='cat-pic'; pic.textContent = cat.emoji;
-  const info = document.createElement('div'); info.innerHTML = `<div style='font-weight:700'>${cat.name}</div><div class='mini'>Lvl ${cat.level} • XP ${cat.xp}</div>`;
-  div.appendChild(pic); div.appendChild(info);
-  div.addEventListener('click', ()=>{ store.selected = cat.id; render(); });
-  catsListEl.appendChild(div);
+// render list
+function renderCats(){ catsListEl.innerHTML=''; store.cats.forEach(cat=>{
+  const d = document.createElement('div'); d.className='cat-card'; if(store.selected===cat.id) d.classList.add('active');
+  const th = document.createElement('div'); th.className='cat-thumb'; th.appendChild(renderSmallSVG(cat));
+  const info = document.createElement('div'); info.innerHTML = `<div style="font-weight:700">${cat.name}</div><div class='mini'>Lvl ${cat.level} • XP ${cat.xp}</div>`;
+  d.appendChild(th); d.appendChild(info);
+  d.addEventListener('click', ()=>{ store.selected = cat.id; render(); save(); });
+  catsListEl.appendChild(d);
 }); }
 
-function getSelectedCat(){ return store.cats.find(c=>c.id===store.selected) || store.cats[0]; }
+function getSelected(){ return store.cats.find(c=>c.id===store.selected) || store.cats[0]; }
 
-function render(){ renderCatsList(); const cat = getSelectedCat(); if(!cat) return;
-  petEmoji.textContent = cat.emoji; selName.textContent = cat.name; selLevel.textContent = cat.level; selXP.textContent = cat.xp;
-  hungerMeter.style.width = clamp(cat.hunger,0,100) + '%'; happyMeter.style.width = clamp(cat.happy,0,100) + '%'; energyMeter.style.width = clamp(cat.energy,0,100) + '%'; cleanMeter.style.width = clamp(cat.clean,0,100) + '%';
-  // collection & badges
-  collectionEl.innerHTML = ''; cat.toys.forEach(t=>{ const d=document.createElement('div'); d.textContent=t; d.style.padding='6px'; d.style.borderRadius='8px'; d.style.background='#fff3'; collectionEl.appendChild(d); });
-  badgesEl.innerHTML = ''; cat.badges.forEach(b=>{ const d=document.createElement('div'); d.textContent=b; d.style.padding='6px'; d.style.borderRadius='8px'; d.style.background='#fff'; badgesEl.appendChild(d); });
+// render scene: cat SVG + toy sprites
+let toyInterval = null; let fishInterval = null; let toyEl = null; let fishEl = null;
+function renderScene(){
+  scene.innerHTML=''; const cat = getSelected(); if(!cat) return;
+  // draw background simple
+  const bg = document.createElement('div'); bg.style.position='absolute'; bg.style.left='0'; bg.style.top='0'; bg.style.right='0'; bg.style.bottom='0'; bg.style.background = 'linear-gradient(180deg,#fff,#FFFCFF)'; scene.appendChild(bg);
+  // cat sprite container
+  const wrap = document.createElement('div'); wrap.style.position='absolute'; wrap.style.left='50%'; wrap.style.top='50%'; wrap.style.transform='translate(-50%,-40%)'; wrap.className='cat-sprite';
+  wrap.appendChild(renderCatSVG(cat)); scene.appendChild(wrap);
+
+  // toy button (click to spawn toy mini-game)
+  const playToy = document.createElement('button'); playToy.className='btn btn-primary'; playToy.textContent='Spawn Toy'; playToy.style.position='absolute'; playToy.style.right='12px'; playToy.style.bottom='12px'; playToy.addEventListener('click', ()=>{ spawnToy(); }); scene.appendChild(playToy);
 }
 
-// log
-function addLog(s){ const d=document.createElement('div'); d.textContent = (new Date()).toLocaleTimeString() + ' • ' + s; logEl.prepend(d); }
-
-// Actions
-function feed(){ const cat = getSelectedCat(); cat.hunger = clamp(cat.hunger + 30, 0, 100); cat.happy = clamp(cat.happy + 8, 0, 100); cat.clean = clamp(cat.clean - 5, 0, 100); gainXP(cat,5); addLog(cat.name + ' ate some treats! 🍪'); render(); save(); }
-
-function groom(){ const cat = getSelectedCat(); cat.clean = clamp(cat.clean + 35, 0, 100); cat.happy = clamp(cat.happy + 6, 0, 100); gainXP(cat,6); addLog('You groomed ' + cat.name + ' ✂️'); render(); save(); }
-
-function nap(){ const cat = getSelectedCat(); cat.energy = clamp(cat.energy + 40, 0, 100); cat.hunger = clamp(cat.hunger - 8, 0, 100); gainXP(cat,4); addLog(cat.name + ' took a cozy nap 💤'); render(); save(); }
-
-function gainXP(cat, amt){ cat.xp += amt; // level up every 50 xp
-  while(cat.xp >= 50){ cat.level += 1; cat.xp -= 50; cat.happy = clamp(cat.happy + 10,0,100); cat.energy = clamp(cat.energy + 10,0,100); cat.badges.push('Level '+cat.level); addLog(cat.name + ' leveled up to ' + cat.level + ' ⭐'); }
+// SVG cat drawing (not emoji) — simple, stylized cat built from shapes
+function renderCatSVG(cat){
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS,'svg'); svg.setAttribute('viewBox','0 0 200 200'); svg.classList.add('cat');
+  // body circle
+  const body = document.createElementNS(svgNS,'ellipse'); body.setAttribute('cx',100); body.setAttribute('cy',120); body.setAttribute('rx',60); body.setAttribute('ry',50); body.setAttribute('fill', cat.color); svg.appendChild(body);
+  // head
+  const head = document.createElementNS(svgNS,'circle'); head.setAttribute('cx',100); head.setAttribute('cy',70); head.setAttribute('r',46); head.setAttribute('fill', cat.color); svg.appendChild(head);
+  // ears
+  const leftEar = document.createElementNS(svgNS,'path'); leftEar.setAttribute('d','M68 42 L54 20 L86 36 Z'); leftEar.setAttribute('fill', cat.color); svg.appendChild(leftEar);
+  const rightEar = document.createElementNS(svgNS,'path'); rightEar.setAttribute('d','M132 42 L146 20 L114 36 Z'); rightEar.setAttribute('fill', cat.color); svg.appendChild(rightEar);
+  // eyes
+  const eyeL = document.createElementNS(svgNS,'ellipse'); eyeL.setAttribute('cx',84); eyeL.setAttribute('cy',68); eyeL.setAttribute('rx',8); eyeL.setAttribute('ry',10); eyeL.setAttribute('fill','#fff'); svg.appendChild(eyeL);
+  const eyeR = document.createElementNS(svgNS,'ellipse'); eyeR.setAttribute('cx',116); eyeR.setAttribute('cy',68); eyeR.setAttribute('rx',8); eyeR.setAttribute('ry',10); eyeR.setAttribute('fill','#fff'); svg.appendChild(eyeR);
+  const pupilL = document.createElementNS(svgNS,'circle'); pupilL.setAttribute('cx',84); pupilL.setAttribute('cy',70); pupilL.setAttribute('r',3); pupilL.setAttribute('fill','#403040'); svg.appendChild(pupilL);
+  const pupilR = document.createElementNS(svgNS,'circle'); pupilR.setAttribute('cx',116); pupilR.setAttribute('cy',70); pupilR.setAttribute('r',3); pupilR.setAttribute('fill','#403040'); svg.appendChild(pupilR);
+  // muzzle
+  const nose = document.createElementNS(svgNS,'path'); nose.setAttribute('d','M96 84 q4 6 8 0'); nose.setAttribute('fill','none'); nose.setAttribute('stroke','#403040'); nose.setAttribute('stroke-width',2); svg.appendChild(nose);
+  // mouth
+  const mouthL = document.createElementNS(svgNS,'path'); mouthL.setAttribute('d','M96 90 q-6 6 -12 6'); mouthL.setAttribute('fill','none'); mouthL.setAttribute('stroke','#403040'); mouthL.setAttribute('stroke-width',2); svg.appendChild(mouthL);
+  const mouthR = document.createElementNS(svgNS,'path'); mouthR.setAttribute('d','M104 90 q6 6 12 6'); mouthR.setAttribute('fill','none'); mouthR.setAttribute('stroke','#403040'); mouthR.setAttribute('stroke-width',2); svg.appendChild(mouthR);
+  // tail
+  const tail = document.createElementNS(svgNS,'path'); tail.setAttribute('d','M155 130 q30 -10 20 -40'); tail.setAttribute('stroke',cat.accent); tail.setAttribute('stroke-width',12); tail.setAttribute('fill','none'); tail.setAttribute('stroke-linecap','round'); svg.appendChild(tail);
+  // decoration: simple stripe patterns
+  if(cat.pattern === 1){ const p1 = document.createElementNS(svgNS,'path'); p1.setAttribute('d','M70 120 q20 -10 40 -8'); p1.setAttribute('stroke',cat.accent); p1.setAttribute('stroke-width',8); p1.setAttribute('fill','none'); p1.setAttribute('stroke-linecap','round'); svg.appendChild(p1); }
+  if(cat.pattern === 2){ const p2 = document.createElementNS(svgNS,'circle'); p2.setAttribute('cx',110); p2.setAttribute('cy',120); p2.setAttribute('r',6); p2.setAttribute('fill',cat.accent); svg.appendChild(p2); }
+  // outfit (simple hat)
+  if(cat.outfit === 'hat'){
+    const hat = document.createElementNS(svgNS,'rect'); hat.setAttribute('x',70); hat.setAttribute('y',30); hat.setAttribute('width',60); hat.setAttribute('height',16); hat.setAttribute('rx',6); hat.setAttribute('fill','#4b2c6f'); svg.appendChild(hat);
+  }
+  return svg;
 }
 
-// Play mini-game: click moving toy which appears in pet window for 8s
-let toyTimer = null; let toyActive=false; let toyClicks=0;
-function startPlay(){ const cat = getSelectedCat(); if(toyActive) return; toyActive = true; toyClicks = 0; toyEl.style.display = 'block'; animateToy(); addLog('Play time! Tap the toy 🎾'); const pop = setTimeout(()=>{ endPlay(); },8000); toyTimer = pop; }
+function renderSmallSVG(cat){ const c = renderCatSVG(cat); c.setAttribute('width','56'); c.setAttribute('height','56'); return c; }
 
-function animateToy(){ if(!toyActive) return; const W = petWindow.clientWidth - 48; const H = petWindow.clientHeight - 48; const x = Math.floor(Math.random()*W); const y = Math.floor(Math.random()*H); toyEl.style.left = x + 'px'; toyEl.style.top = y + 'px'; // small wiggle
-  if(toyActive) setTimeout(animateToy, 600);
+function renderUI(){ const cat = getSelected(); if(!cat) return; selName.textContent = cat.name; selLevel.textContent = cat.level; selXP.textContent = cat.xp; hungerMeter.style.width = clamp(cat.hunger,0,100)+'%'; happyMeter.style.width = clamp(cat.happy,0,100)+'%'; energyMeter.style.width = clamp(cat.energy,0,100)+'%'; cleanMeter.style.width = clamp(cat.clean,0,100)+'%';
+  // outfits
+  outfitsEl.innerHTML=''; const basic = document.createElement('button'); basic.className='btn btn-ghost'; basic.textContent='No outfit'; basic.addEventListener('click', ()=>{ cat.outfit = null; render(); save(); }); outfitsEl.appendChild(basic);
+  const hatB = document.createElement('button'); hatB.className='btn btn-ghost'; hatB.textContent='Hat'; hatB.addEventListener('click', ()=>{ cat.outfit='hat'; render(); save(); }); outfitsEl.appendChild(hatB);
+  // badges
+  badgesEl.innerHTML=''; cat.badges.forEach(b=>{ const el = document.createElement('div'); el.className='mini'; el.textContent = b; el.style.padding='6px'; el.style.borderRadius='8px'; el.style.background='#fff3'; badgesEl.appendChild(el); });
+  dailyStreakEl.textContent = store.dailyStreak || 0;
 }
 
-toyEl.addEventListener('click', ()=>{ if(!toyActive) return; toyClicks++; const cat = getSelectedCat(); cat.happy = clamp(cat.happy + 6,0,100); cat.energy = clamp(cat.energy - 4,0,100); gainXP(cat,3); addLog(cat.name + ' bopped the toy! 🐾'); render(); if(toyClicks % 5 === 0){ // gift a toy
-    const gift = ['🧸','🎀','🐟','🪶'][Math.floor(Math.random()*4)]; cat.toys.push(gift); addLog(cat.name + ' found a toy: ' + gift); render(); }
-});
+// actions
+function addLog(s){ const d = document.createElement('div'); d.textContent = (new Date()).toLocaleTimeString()+ ' • ' + s; logEl.prepend(d); }
 
-function endPlay(){ toyActive = false; toyEl.style.display='none'; clearTimeout(toyTimer); addLog('Play ended'); save(); }
+function gainXP(cat, amt){ cat.xp += amt; while(cat.xp >= 60){ cat.level += 1; cat.xp -= 60; cat.badges.push('Lv'+cat.level); addLog(cat.name + ' leveled to ' + cat.level + '!'); } }
 
-// add new cat
+function feed(){ const cat = getSelected(); cat.hunger = clamp(cat.hunger + 30,0,100); cat.happy = clamp(cat.happy + 6,0,100); cat.clean = clamp(cat.clean - 4,0,100); gainXP(cat,5); addLog('You fed ' + cat.name); render(); save(); }
+function groom(){ const cat = getSelected(); cat.clean = clamp(cat.clean + 35,0,100); cat.happy = clamp(cat.happy + 8,0,100); gainXP(cat,6); addLog('You groomed ' + cat.name); render(); save(); }
+function nap(){ const cat = getSelected(); cat.energy = clamp(cat.energy + 40,0,100); cat.hunger = clamp(cat.hunger - 8,0,100); gainXP(cat,4); addLog(cat.name + ' had a nap'); render(); save(); }
+
+// play mini-game: fish catching — fish swims across scene, click it
+function spawnFish(){ // clears old
+  if(fishEl) fishEl.remove(); fishEl = document.createElement('div'); fishEl.className='fish'; fishEl.textContent='🐟'; scene.appendChild(fishEl);
+  let x = -80; const y = 180 + Math.random()*100; fishEl.style.top = y+'px'; fishEl.style.left = x+'px';
+  const speed = 2 + Math.random()*3; const tid = setInterval(()=>{ x += speed; fishEl.style.left = x+'px'; if(x > scene.clientWidth + 80){ clearInterval(tid); fishEl.remove(); fishEl=null; } },16);
+  fishEl.addEventListener('click', ()=>{ clearInterval(tid); fishEl.remove(); fishEl = null; const cat = getSelected(); cat.happy = clamp(cat.happy + 10,0,100); cat.energy = clamp(cat.energy - 6,0,100); gainXP(cat,10); addLog(cat.name + ' caught a fish!'); render(); save(); });
+}
+
+// spawn a toy that moves and can be clicked many times
+function spawnToy(){ if(toyEl) toyEl.remove(); toyEl = document.createElement('div'); toyEl.className='toy'; toyEl.textContent='🎾'; scene.appendChild(toyEl);
+  let vx = (Math.random()<0.5?1:-1)*(2+Math.random()*3); let vy = (Math.random()<0.5?1:-1)*(1+Math.random()*2); let px = Math.random()*(scene.clientWidth-80); let py = Math.random()*(scene.clientHeight-80);
+  toyEl.style.left = px+'px'; toyEl.style.top = py+'px'; let clicked = 0; const tid = setInterval(()=>{
+    px += vx; py += vy; if(px < 8 || px > scene.clientWidth-64) vx *= -1; if(py < 8 || py > scene.clientHeight-64) vy *= -1; toyEl.style.left = px+'px'; toyEl.style.top = py+'px';
+  },20);
+  toyEl.addEventListener('click', ()=>{ clicked++; const cat = getSelected(); cat.happy = clamp(cat.happy + 5,0,100); cat.energy = clamp(cat.energy - 3,0,100); gainXP(cat,4); addLog(cat.name + ' batted the toy!'); render(); save(); if(clicked >= 6){ clearInterval(tid); toyEl.remove(); toyEl = null; addLog('Toy play ended'); } });
+}
+
+// create new cat
 newCatBtn.addEventListener('click', ()=>{
-  const name = prompt('Name your cat (or leave blank for a cute name)'); const emoji = prompt('Pick an emoji for your cat (e.g. 😺 😸 😻 🐱)') || '😺';
-  const cat = {id:idGen(), name: name && name.trim() ? name.trim() : 'Kitty ' + Math.floor(Math.random()*99), emoji: emoji, hunger:50, happy:60, energy:70, clean:80, xp:0, level:1, toys:[], badges:[]};
-  store.cats.push(cat); store.selected = cat.id; render(); save(); addLog('Welcome new cat: ' + cat.name + ' ' + cat.emoji);
+  const name = prompt('Name your cat?') || ('Cat '+Math.floor(Math.random()*99));
+  const color = prompt('Pick a color hex for your cat (e.g. #F7D6E0)') || '#EFD6F2';
+  const c = {id:idGen(), name, color, accent:'#F2A5C0', pattern: Math.floor(Math.random()*3), hunger:60, happy:70, energy:80, clean:90, xp:0, level:1, outfits:[], badges:[]};
+  store.cats.push(c); store.selected = c.id; render(); save(); addLog('New cat: '+c.name);
 });
 
-// toy click attaches
-playBtn.addEventListener('click', ()=>{ startPlay(); });
-feedBtn.addEventListener('click', ()=>{ feed(); });
-groomBtn.addEventListener('click', ()=>{ groom(); });
-sleepBtn.addEventListener('click', ()=>{ nap(); });
-
-// periodic upkeep: hunger increases, energy decreases, happiness drifts
+// periodic decay and autosave
 setInterval(()=>{
-  store.cats.forEach(cat=>{
-    cat.hunger = clamp(cat.hunger - 2, 0, 100); // lower hunger means hungry? We'll treat 0-100 where higher = fuller; so decrease fullness
-    // if very hungry (hunger<20) happiness drops
-    if(cat.hunger < 25) cat.happy = clamp(cat.happy - 4, 0, 100);
-    // energy slowly recovers if resting
-    cat.energy = clamp(cat.energy - 1, 0, 100);
-    // if very dirty => happiness drop
-    if(cat.clean < 30) cat.happy = clamp(cat.happy - 2, 0, 100);
-  });
-  render(); save();
-}, 60 * 1000); // every minute
+  store.cats.forEach(c=>{
+    c.hunger = clamp(c.hunger - 2,0,100);
+    if(c.hunger < 25) c.happy = clamp(c.happy - 3,0,100);
+    c.energy = clamp(c.energy - 1,0,100);
+    if(c.clean < 30) c.happy = clamp(c.happy - 1,0,100);
+  }); render(); save(); }, 60*1000);
 
-// autosave every minute
-setInterval(()=>{ save(); }, 60 * 1000);
+// quick bindings
+document.getElementById('feedBtn').addEventListener('click', feed);
+document.getElementById('groomBtn').addEventListener('click', groom);
+document.getElementById('sleepBtn').addEventListener('click', nap);
+document.getElementById('playBtn').addEventListener('click', ()=>{ // random mini-game
+  if(Math.random() < 0.5) spawnToy(); else spawnFish(); });
 
-// toy quick focus (touch-friendly)
-petWindow.addEventListener('click', ()=>{ /* focus spot */ });
+// render and start
+load(); renderCats(); renderScene(); renderUI(); save();
 
-// small fun: click pet emoji to make it purr & sparkle
-petEmoji.addEventListener('click', ()=>{ sparkles.style.opacity = 1; sparkles.style.transform = 'scale(1.1)'; setTimeout(()=>{ sparkles.style.opacity = 0.7; sparkles.style.transform = 'scale(1)'; },600); const cat = getSelectedCat(); cat.happy = clamp(cat.happy + 5,0,100); gainXP(cat,2); render(); save(); addLog(cat.name + ' purrs 😺'); });
+function render(){ renderCats(); renderScene(); renderUI(); }
 
-// save & load
-load(); render(); save();
-
-// expose simple cheat for testing: press C to add xp
-window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='c'){ const cat = getSelectedCat(); gainXP(cat,20); render(); save(); } if(e.key.toLowerCase()==='t'){ // toggle toy
-  if(toyActive) endPlay(); else startPlay(); }});
+// expose for debug
+window._cozy = {store, save, render, spawnToy, spawnFish};
 
 </script>
 </body>
